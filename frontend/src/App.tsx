@@ -2,10 +2,21 @@ import { useEffect, useState } from "react";
 import { Heading } from "@chakra-ui/react";
 import "dotenv/config";
 import { type Recipe, saveRecipe, getRecipes, deleteRecipe } from "./storage";
+import { Page } from "./types";
+
+import UploadReceipt from "./pages/Upload";
+import TakePicture from "./pages/TakePicture";
+import SearchRecipe from "./pages/Search";
+import SavedRecipes from "./pages/Saved";
+import ScanRecipes from "./pages/Scan";
+import Pantry from "./pages/Pantry";
 
 import "./App.css";
 
 function App() {
+	//navigation state
+	const [currentPage, setCurrentPage] = useState<Page>("home");
+
 	//storage code
 	const [recipes, setRecipes] = useState<Recipe[]>([]);
 	const [title, setTitle] = useState("");
@@ -33,6 +44,20 @@ function App() {
 	async function handleDelete(id: string) {
 		await deleteRecipe(id);
 		setRecipes(await getRecipes());
+	}
+
+	if (currentPage !== "home") {
+		return (
+			<>
+				<button onClick={() => setCurrentPage("home")}>← Back</button>
+				{currentPage === "upload-receipt" && <UploadReceipt />}
+				{currentPage === "take-picture" && <TakePicture />}
+				{currentPage === "search-recipe" && <SearchRecipe />}
+				{currentPage === "saved-recipes" && <SavedRecipes />}
+				{currentPage === "scan-recipes" && <ScanRecipes />}
+				{currentPage === "pantry" && <Pantry />}
+			</>
+		);
 	}
 
 	return (

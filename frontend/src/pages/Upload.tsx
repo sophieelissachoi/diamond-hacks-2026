@@ -1,9 +1,16 @@
-export default function Upload() {
-	return (
-		<div className="upload-page">
-			<h1>Upload Receipt</h1>
+import { Box, Heading } from "@chakra-ui/react";
 
-			<form>{/* file upload will go here later */}</form>
-		</div>
+export default function UploadReceipt() {
+	return (
+		<Box p={6}>
+			<Heading size="lg">Upload Receipt</Heading>
+
+			<Box
+				as="form"
+				mt={4}
+			>
+				{/* we’ll add inputs later */}
+			</Box>
+		</Box>
 	);
 }
