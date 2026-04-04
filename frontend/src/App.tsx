@@ -1,19 +1,11 @@
 import { useEffect, useState } from "react";
-import { Heading, Button } from "@chakra-ui/react";
-import { BrowserUse } from "browser-use-sdk/v3";
+import { Heading } from "@chakra-ui/react";
+import "dotenv/config";
 import { type Recipe, saveRecipe, getRecipes, deleteRecipe } from "./storage";
 
 import "./App.css";
 
 function App() {
-	const test = async () => {
-		const client = new BrowserUse();
-		const result = await client.run(
-			"List the top 20 posts on Hacker News today with their points",
-		);
-		console.log(result.output);
-	};
-
 	//storage code
 	const [recipes, setRecipes] = useState<Recipe[]>([]);
 	const [title, setTitle] = useState("");
@@ -46,7 +38,6 @@ function App() {
 	return (
 		<>
 			<Heading> hi </Heading>
-			<Button onClick={() => test()}> test </Button>
 
 			<input
 				placeholder="Recipe title"
