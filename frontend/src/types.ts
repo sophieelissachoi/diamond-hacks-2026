@@ -1,8 +1,13 @@
 export type Page =
 	| "home"
+	| "Search Recipe"
+	| "Saved Recipes"
+	| "Scan Recipe"
+	| "Pantry";
+
+export type PantryPage =
+	| "pantry"
+	| "subpantry"
 	| "upload-receipt"
 	| "take-picture"
-	| "search-recipe"
-	| "saved-recipes"
-	| "scan-recipes"
-	| "pantry";
+	| "edit-confirmation";

@@ -1,94 +1,58 @@
 import { useEffect, useState } from "react";
-import { Heading } from "@chakra-ui/react";
-import "dotenv/config";
-import { type Recipe, saveRecipe, getRecipes, deleteRecipe } from "./storage";
-import { Page } from "./types";
+import { Heading, Button } from "@chakra-ui/react";
+import { type Page, type PantryPage } from "./types";
 
-import UploadReceipt from "./pages/Upload";
-import TakePicture from "./pages/TakePicture";
 import SearchRecipe from "./pages/Search";
 import SavedRecipes from "./pages/Saved";
 import ScanRecipes from "./pages/Scan";
 import Pantry from "./pages/Pantry";
 
-import "./App.css";
-
 function App() {
 	//navigation state
-	const [currentPage, setCurrentPage] = useState<Page>("home");
+	const [currentPage, setCurrentPage] = useState<Page | PantryPage>("home");
+	const pages: Page[] = [
+		"Search Recipe",
+		"Saved Recipes",
+		"Scan Recipe",
+		"Pantry",
+	];
 
-	//storage code
-	const [recipes, setRecipes] = useState<Recipe[]>([]);
-	const [title, setTitle] = useState("");
-	const [notes, setNotes] = useState("");
-	const [url, setUrl] = useState("");
-
-	useEffect(() => {
-		getRecipes().then(setRecipes);
-	}, []);
-
-	useEffect(() => {
-		chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-			setUrl(tabs[0]?.url ?? "");
-		});
-	}, []);
-
-	async function handleSave() {
-		if (!title.trim()) return;
-		await saveRecipe({ title, url, notes });
-		setRecipes(await getRecipes());
-		setTitle("");
-		setNotes("");
-	}
-
-	async function handleDelete(id: string) {
-		await deleteRecipe(id);
-		setRecipes(await getRecipes());
-	}
+	const pantryPage: PantryPage[] = [
+		"subpantry",
+		"upload-receipt",
+		"take-picture",
+		"edit-confirmation",
+	];
 
 	if (currentPage !== "home") {
 		return (
 			<>
-				<button onClick={() => setCurrentPage("home")}>← Back</button>
-				{currentPage === "upload-receipt" && <UploadReceipt />}
-				{currentPage === "take-picture" && <TakePicture />}
-				{currentPage === "search-recipe" && <SearchRecipe />}
-				{currentPage === "saved-recipes" && <SavedRecipes />}
-				{currentPage === "scan-recipes" && <ScanRecipes />}
-				{currentPage === "pantry" && <Pantry />}
+				{currentPage === "Search Recipe" && (
+					<SearchRecipe setCurrentPage={setCurrentPage} />
+				)}
+				{currentPage === "Saved Recipes" && (
+					<SavedRecipes setCurrentPage={setCurrentPage} />
+				)}
+				{currentPage === "Scan Recipe" && (
+					<ScanRecipes setCurrentPage={setCurrentPage} />
+				)}
+				{currentPage === "Pantry" && <Pantry setCurrentPage={setCurrentPage} />}
 			</>
 		);
 	}
 
 	return (
 		<>
-			<Heading> hi </Heading>
+			<Heading> Mise </Heading>
 
-			<input
-				placeholder="Recipe title"
-				value={title}
-				onChange={(e) => setTitle(e.target.value)}
-			/>
-			<textarea
-				placeholder="Notes (optional)"
-				value={notes}
-				onChange={(e) => setNotes(e.target.value)}
-			/>
-			<button onClick={handleSave}>Save Recipe</button>
-
-			{recipes.map((r) => (
-				<div key={r.id}>
-					<a
-						href={r.url}
-						target="_blank"
-						rel="noreferrer"
-					>
-						{r.title}
-					</a>
-					<p>{r.notes}</p>
-					<button onClick={() => handleDelete(r.id)}>Delete</button>
-				</div>
-			))}
+			{/* ---- home page nav Buttons ---- */}
+			<div
+				style={{ display: "flex", flexDirection: "column", gap: 8, padding: 16 }}
+			>
+				{pages.map((p) => (
+					<Button onClick={() => setCurrentPage(p)}>{p}</Button>
+				))}
+			</div>
 		</>
 	);
 }

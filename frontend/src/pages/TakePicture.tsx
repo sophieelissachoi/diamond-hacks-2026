@@ -1,16 +1,20 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Heading, Button } from "@chakra-ui/react";
 
-export default function TakePicture() {
+interface Props {
+	onDone: (ingredients: string[]) => void;
+}
+
+export default function TakePicture({ onDone }: Props) {
+	async function handleCapture() {
+		// LLM logic goes here
+		const ingredients: string[] = []; // replace with real result
+		onDone(ingredients);
+	}
+
 	return (
-		<Box p={6}>
-			<Heading size="lg">Take a picture of your reciept</Heading>
-
-			<Box
-				as="form"
-				mt={4}
-			>
-				{/* we’ll add inputs later */}
-			</Box>
-		</Box>
+		<>
+			<Heading size="md">Take Picture</Heading>
+			<Button onClick={handleCapture}>Capture & Scan</Button>
+		</>
 	);
 }

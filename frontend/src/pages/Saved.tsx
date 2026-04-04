@@ -1,9 +1,15 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Heading, Button } from "@chakra-ui/react";
+import { type Page, type PantryPage } from "../types";
 
-export default function SavedRecipes() {
+export default function SavedRecipes({
+	setCurrentPage,
+}: {
+	setCurrentPage: React.Dispatch<React.SetStateAction<Page | PantryPage>>;
+}) {
 	return (
 		<Box p={6}>
-			<Heading size="lg">Your saved recipes</Heading>
+			<Button onClick={() => setCurrentPage("home")}>← Back</Button>
+			<Heading size="lg">Saved Recipes</Heading>
 
 			<Box
 				as="form"
