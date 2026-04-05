@@ -251,7 +251,7 @@ export default function ScanRecipes({
 								fontFamily="'Playfair Display', serif"
 								fontSize="sm"
 								fontWeight="700"
-								color="#826413"
+								color="#a98319"
 								mt={3}
 							>
 								Substitute
