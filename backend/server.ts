@@ -77,14 +77,34 @@ app.post("/find-ingredients", async (req, res) => {
       - For each ingredient that can be SUBSTITUTED, find its element and set style.backgroundColor to "lightblue"
 
       Step 3: Return ONLY the JSON object from Step 1. No explanation, no markdown, no extra text, no backticks, no \`\`\`json fences, no string. just json object only.`,
+			{
+				structuredOutputJson: JSON.stringify({
+					type: "object",
+					properties: {
+						link: { type: "string" },
+						title: { type: "string" },
+						ingredients: { type: "string" },
+						instructions: { type: "string" },
+						appliances: { type: "array", items: { type: "string" } },
+						have: { type: "array", items: { type: "string" } },
+						need: { type: "array", items: { type: "string" } },
+						substitute: { type: "array", items: { type: "string" } },
+					},
+					required: [
+						"link",
+						"title",
+						"ingredients",
+						"instructions",
+						"appliances",
+						"have",
+						"need",
+						"substitute",
+					],
+				}),
+			} as any,
 		);
 		console.log("Result: ", result);
-		const raw = result.output;
-		const cleaned =
-			typeof raw === "string" ? raw.substring(raw.indexOf("{")) : raw;
-		return res.json({
-			output: typeof cleaned === "string" ? JSON.parse(cleaned) : cleaned,
-		});
+		return res.json({ output: result.output });
 	} catch (err) {
 		console.error("Browser Use error:", err);
 		return res.status(500).json({ error: "Failed to run browser task" });
