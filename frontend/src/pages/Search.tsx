@@ -70,7 +70,7 @@ export default function SearchRecipe({
 			setSaved(false);
 			setResult(null); // clear the result
 			setRecipeType(""); // clear the search input
-		}, 2000);
+		}, 1000);
 	}
 
 	return (

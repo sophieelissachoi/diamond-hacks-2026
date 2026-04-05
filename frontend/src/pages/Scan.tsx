@@ -74,7 +74,7 @@ export default function ScanRecipes({
 
 			await chrome.scripting.executeScript({
 				target: { tabId },
-				func: (have: string[], need: string[], substitute: object) => {
+				func: (have: string[], need: string[], substitute: string) => {
 					const allText = document.querySelectorAll("li, p, span, td");
 
 					allText.forEach((el) => {
@@ -82,9 +82,11 @@ export default function ScanRecipes({
 
 						const isHave = have.some((i) => text.includes(i.toLowerCase()));
 						const isNeed = need.some((i) => text.includes(i.toLowerCase()));
-						const isSub = Object.keys(substitute).some((i) =>
-							text.includes(i.toLowerCase()),
-						);
+						const isSub = substitute
+							.split(",")
+							.some((i) =>
+								text.includes(i.toLowerCase().split("can substitute")[1]?.trim() ?? ""),
+							);
 
 						if (isHave) (el as HTMLElement).style.backgroundColor = "lightgreen";
 						else if (isSub) (el as HTMLElement).style.backgroundColor = "lightblue";
@@ -95,7 +97,7 @@ export default function ScanRecipes({
 				args: [
 					data.output.have ?? [],
 					data.output.need ?? [],
-					data.output.substitute ?? {},
+					typeof data.output.substitute === "string" ? data.output.substitute : "",
 				],
 			});
 		} finally {
