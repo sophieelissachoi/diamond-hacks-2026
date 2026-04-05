@@ -45,20 +45,10 @@ export default function Pantry({
 	if (currentPagePantry !== "pantry") {
 		return (
 			<>
-				<Button
-					variant="ghost"
-					color="#7A8F6A"
-					fontFamily="'Inter', sans-serif"
-					fontSize="sm"
-					px={0}
-					_hover={{ color: "#2D5016", bg: "transparent" }}
-					onClick={() => setCurrentPagePantry("pantry")}
-				>
-					← Back
-				</Button>
 				{currentPagePantry === "subpantry" && <SubPantry category={category} />}
 				{currentPagePantry === "upload-receipt" && (
 					<UploadReceipt
+						setCurrentPagePantry={setCurrentPagePantry}
 						onDone={(sortedIngredients) => {
 							setIngredients(sortedIngredients);
 							setCurrentPagePantry("edit-confirmation");
