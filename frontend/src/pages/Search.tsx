@@ -296,6 +296,21 @@ export default function SearchRecipe({
 						>
 							{saved ? "Saved ✓" : "Save Recipe"}
 						</Button>
+						<Button
+							mt={2}
+							w="100%"
+							variant="ghost"
+							color="#7A8F6A"
+							fontFamily="'Inter', sans-serif"
+							fontSize="sm"
+							_hover={{ color: "#2D5016", bg: "transparent" }}
+							onClick={() => {
+								setResult(null);
+								setRecipeType("");
+							}}
+						>
+							Cancel
+						</Button>
 					</Box>
 				</>
 			)}
