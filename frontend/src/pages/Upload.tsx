@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Heading, Button, Input, Box, Spinner, Text } from "@chakra-ui/react";
-import { type Ingredient } from "../types";
+import { type RawIngredients } from "../types";
 
 interface Props {
-	onDone: (ingredients: Ingredient[]) => void;
+	onDone: (ingredients: RawIngredients) => void;
 }
 
 export default function UploadReceipt({ onDone }: Props) {

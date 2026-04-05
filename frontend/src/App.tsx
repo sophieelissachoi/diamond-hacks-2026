@@ -6,6 +6,7 @@ import {
 	GridItem,
 	VStack,
 	Text,
+	Divider,
 } from "@chakra-ui/react";
 import { type Page, type PantryPage } from "./types";
 
@@ -15,7 +16,6 @@ import ScanRecipes from "./pages/Scan";
 import Pantry from "./pages/Pantry";
 
 function App() {
-	//navigation state
 	const [currentPage, setCurrentPage] = useState<Page | PantryPage>("home");
 	const pages: Page[] = [
 		"Search Recipe",
@@ -44,55 +44,74 @@ function App() {
 	return (
 		<VStack
 			w="300px"
-			h="500px"
-			display="flex"
+			minH="500px"
 			justifyContent="center"
 			alignItems="center"
-			bg="#F5F0E8"
-			p={6}
-			gap={4}
+			bg="#F7F3EC"
+			p={8}
+			gap={6}
 		>
-			<VStack gap={0}>
+			{/* header */}
+			<VStack gap={1}>
 				<Heading
-					fontSize="3xl"
-					fontWeight="800"
-					color="#2D5016"
-					letterSpacing="wider"
+					fontFamily="'Playfair Display', serif"
+					fontSize="4xl"
+					fontWeight="700"
+					color="#1E3A0F"
+					letterSpacing="0.15em"
 				>
-					MISE
+					mise
 				</Heading>
-				<Text sx={{ fontSize: "sm", color: "#6B7C5C" }}>
+				<Divider
+					borderColor="#A8C090"
+					w="40px"
+					borderWidth="1.5px"
+				/>
+				<Text
+					fontFamily="'Inter', sans-serif"
+					fontSize="xs"
+					color="#7A8F6A"
+					letterSpacing="0.2em"
+					textTransform="uppercase"
+				>
 					your kitchen assistant
 				</Text>
 			</VStack>
 
+			{/* nav grid */}
 			<Grid
 				templateColumns="repeat(2, 1fr)"
 				gap={3}
-				mt={2}
+				w="100%"
 			>
 				{pages.map((p) => (
 					<GridItem key={p}>
 						<Button
-							w="110px"
-							h="110px"
+							w="100%"
+							h="100px"
 							whiteSpace="normal"
 							wordBreak="break-word"
 							onClick={() => setCurrentPage(p)}
 							bg="#4A7C2F"
 							color="white"
-							borderRadius="xl"
+							border="1.5px solid"
+							borderColor="#4A7C2F"
+							borderRadius="2xl"
+							fontFamily="'Inter', sans-serif"
 							fontSize="sm"
-							fontWeight="600"
-							_hover={{ bg: "#3A6B20", transform: "scale(1.03)" }}
-							_active={{ bg: "#2D5016" }}
-							transition="all 0.15s"
-							boxShadow="md"
+							fontWeight="500"
+							letterSpacing="0.02em"
+							_hover={{
+								bg: "white",
+								color: "#2D5016",
+								borderColor: "#C8D8B8",
+								transform: "translateY(-2px)",
+								boxShadow: "0 4px 12px rgba(74,124,47,0.25)",
+							}}
+							_active={{ bg: "#2D5016", color: "white" }}
+							transition="all 0.2s"
 						>
-							{p === "Search Recipe" && "Search Recipe"}
-							{p === "Saved Recipes" && "Saved Recipes"}
-							{p === "Scan Recipe" && "Scan Recipe"}
-							{p === "Pantry" && "Pantry"}
+							{p}
 						</Button>
 					</GridItem>
 				))}

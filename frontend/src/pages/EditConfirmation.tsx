@@ -28,7 +28,9 @@ export default function EditConfirmation({
 
 	function handleConfirm() {
 		chrome.storage.local.get(["pantry"], (result) => {
-			const existing = result.pantry || [];
+			const existing: Ingredient[] = Array.isArray(result.pantry)
+				? result.pantry
+				: [];
 			const updated = [...existing, ...ingredientList];
 			chrome.storage.local.set({ pantry: updated }, () => {
 				console.log("Saved to pantry:", updated);

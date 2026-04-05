@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import UploadReceipt from "./Upload";
 import TakePicture from "./TakePicture";
-import { type PantryPage, type Page, type Ingredient } from "../types";
+import { type PantryPage, type Page, type RawIngredients } from "../types";
 import SubPantry from "./SubPantry";
 import EditConfirmation from "./EditConfirmation";
 
@@ -21,7 +21,12 @@ export default function Pantry({
 	const [currentPagePantry, setCurrentPagePantry] =
 		useState<PantryPage>("pantry");
 	const [category, setCategory] = useState<string>("");
-	const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+	const [ingredients, setIngredients] = useState<RawIngredients>({
+		name: [],
+		category: [],
+		food: [],
+		quantity: [],
+	});
 
 	const categories = [
 		"Dairy",

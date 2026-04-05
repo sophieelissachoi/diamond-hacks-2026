@@ -1,5 +1,5 @@
 import { Heading } from "@chakra-ui/react";
-import { type Ingredient } from "../types";
+//import { type Ingredient } from "../types";
 
 interface SubPantryInterfaces {
 	category: string;

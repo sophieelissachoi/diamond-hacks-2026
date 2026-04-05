@@ -16,7 +16,14 @@ export interface Ingredient {
 	name: string;
 	category: string;
 	food: string;
-	quantity: string;
+	quantity: number;
 	location?: string;
 	note?: string;
+}
+
+export interface RawIngredients {
+	name: string[];
+	category: string[];
+	food: string[];
+	quantity: number[];
 }
