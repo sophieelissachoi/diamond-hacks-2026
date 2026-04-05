@@ -79,7 +79,12 @@ app.post("/find-ingredients", async (req, res) => {
       Step 3: Return ONLY the JSON object from Step 1. No explanation, no markdown, no extra text, no backticks, no \`\`\`json fences, no string. just json object only.`,
 		);
 		console.log("Result: ", result);
-		return res.json({ output: result.output });
+		const raw = result.output;
+		const cleaned =
+			typeof raw === "string" ? raw.substring(raw.indexOf("{")) : raw;
+		return res.json({
+			output: typeof cleaned === "string" ? JSON.parse(cleaned) : cleaned,
+		});
 	} catch (err) {
 		console.error("Browser Use error:", err);
 		return res.status(500).json({ error: "Failed to run browser task" });
