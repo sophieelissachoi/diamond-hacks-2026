@@ -77,35 +77,25 @@ app.post("/find-ingredients", async (req, res) => {
       - For each ingredient that can be SUBSTITUTED, find its element and set style.backgroundColor to "lightblue"
 
       Step 3: Return ONLY the JSON object from Step 1. No explanation, no markdown, no extra text, no backticks, no \`\`\`json fences, no string. just json object only.`,
-			{
-				structuredOutputJson: JSON.stringify({
-					type: "object",
-					properties: {
-						link: { type: "string" },
-						title: { type: "string" },
-						ingredients: { type: "string" },
-						instructions: { type: "string" },
-						appliances: { type: "array", items: { type: "string" } },
-						have: { type: "array", items: { type: "string" } },
-						need: { type: "array", items: { type: "string" } },
-						substitute: { type: "array", items: { type: "string" } },
-					},
-					required: [
-						"link",
-						"title",
-						"ingredients",
-						"instructions",
-						"appliances",
-						"have",
-						"need",
-						"substitute",
-					],
-				}),
-			} as any,
 		);
 		const raw = result.output;
-		const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
-		console.log("Result: ", parsed);
+		console.log("Result: ", raw);
+
+		let parsed;
+		if (typeof raw === "string") {
+			const jsonStart = raw.indexOf("{");
+			if (jsonStart === -1) {
+				return res.status(500).json({ error: "No JSON found in output" });
+			}
+			try {
+				parsed = JSON.parse(raw.substring(jsonStart));
+			} catch {
+				return res.status(500).json({ error: "Failed to parse output as JSON" });
+			}
+		} else {
+			parsed = raw;
+		}
+
 		return res.json({ output: parsed });
 	} catch (err) {
 		console.error("Browser Use error:", err);
