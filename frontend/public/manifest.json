@@ -6,6 +6,9 @@
 	"action": {
 		"default_popup": "index.html"
 	},
-	"permissions": ["storage", "tabs", "camera"],
+	"background": {
+		"service_worker": "background.js"
+	},
+	"permissions": ["storage", "tabs", "camera", "scripting"],
 	"host_permissions": ["http://localhost:3001/*", "<all_urls>"]
 }

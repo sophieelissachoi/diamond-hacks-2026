@@ -69,36 +69,12 @@ export default function ScanRecipes({
 			setRecipeInfo(data.output);
 			setRecipeType(url ?? "Scanned Recipe");
 
-			const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-			const tabId = tabs[0].id!;
-
-			await chrome.scripting.executeScript({
-				target: { tabId },
-				func: (have: string[], need: string[], substitute: string) => {
-					const allText = document.querySelectorAll("li, p, span, td");
-
-					allText.forEach((el) => {
-						const text = el.textContent?.toLowerCase() ?? "";
-
-						const isHave = have.some((i) => text.includes(i.toLowerCase()));
-						const isNeed = need.some((i) => text.includes(i.toLowerCase()));
-						const isSub = substitute
-							.split(",")
-							.some((i) =>
-								text.includes(i.toLowerCase().split("can substitute")[1]?.trim() ?? ""),
-							);
-
-						if (isHave) (el as HTMLElement).style.backgroundColor = "lightgreen";
-						else if (isSub) (el as HTMLElement).style.backgroundColor = "lightblue";
-						else if (isNeed)
-							(el as HTMLElement).style.backgroundColor = "lightyellow";
-					});
-				},
-				args: [
-					data.output.have ?? [],
-					data.output.need ?? [],
+			chrome.runtime.sendMessage({
+				type: "HIGHLIGHT_INGREDIENTS",
+				have: data.output.have ?? [],
+				need: data.output.need ?? [],
+				substitute:
 					typeof data.output.substitute === "string" ? data.output.substitute : "",
-				],
 			});
 		} finally {
 			setIsLoading(false);
