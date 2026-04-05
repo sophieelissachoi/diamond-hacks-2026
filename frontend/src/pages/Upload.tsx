@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { Heading, Button, Input, Box } from "@chakra-ui/react";
+import { Heading, Button, Input, Box, Spinner, Text } from "@chakra-ui/react";
+import { type Ingredient } from "../types";
 
 interface Props {
-	onDone: (ingredients: string[]) => void;
+	onDone: (ingredients: Ingredient[]) => void;
 }
 
 export default function UploadReceipt({ onDone }: Props) {
 	const [file, setFile] = useState<File | null>(null);
+	const [loading, setLoading] = useState(false);
 
 	function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
 		if (e.target.files && e.target.files[0]) {
@@ -16,9 +18,31 @@ export default function UploadReceipt({ onDone }: Props) {
 
 	async function handleUpload() {
 		if (!file) return;
-		// LLM logic goes here
-		const ingredients: string[] = []; // replace with real result
-		onDone(ingredients);
+		setLoading(true);
+		try {
+			const base64 = await new Promise<string>((resolve, reject) => {
+				const reader = new FileReader();
+				reader.onload = () => resolve(reader.result as string);
+				reader.onerror = reject;
+				reader.readAsDataURL(file);
+			});
+
+			const res = await fetch("http://localhost:3001/scan-picture", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					picture: base64,
+					fileName: file.name,
+					contentType: file.type,
+				}),
+			});
+
+			const data = await res.json();
+			const parsed = data.output;
+			onDone(parsed);
+		} finally {
+			setLoading(false);
+		}
 	}
 
 	return (
@@ -44,10 +68,22 @@ export default function UploadReceipt({ onDone }: Props) {
 			<Button
 				onClick={handleUpload}
 				mt={3}
-				isDisabled={!file}
+				isDisabled={!file || loading}
 			>
-				Upload & Scan
+				{loading ? "Scanning..." : "Upload & Scan"}
 			</Button>
+
+			{loading && (
+				<Box
+					mt={4}
+					display="flex"
+					alignItems="center"
+					gap={2}
+				>
+					<Spinner size="sm" />
+					<Text fontSize="sm">Analyzing your receipt...</Text>
+				</Box>
+			)}
 		</Box>
 	);
 }

@@ -73,3 +73,37 @@ export async function deleteRecipe(id: string): Promise<void> {
 		recipes: existing.filter((r) => r.id !== id),
 	});
 }
+
+export interface SavedRecipe {
+	link: string;
+	ingredients: string;
+	instructions: string;
+	appliances: string;
+	recipeType: string;
+	savedAt: string;
+}
+
+export async function saveFindRecipe(
+	recipe: Omit<SavedRecipe, "savedAt">,
+): Promise<void> {
+	const existing = await getSavedRecipes();
+	const newRecipe: SavedRecipe = {
+		...recipe,
+		savedAt: new Date().toISOString(),
+	};
+	await chrome.storage.sync.set({ savedRecipes: [...existing, newRecipe] });
+}
+
+export async function getSavedRecipes(): Promise<SavedRecipe[]> {
+	const result = (await chrome.storage.sync.get("savedRecipes")) as {
+		savedRecipes?: SavedRecipe[];
+	};
+	return result.savedRecipes ?? [];
+}
+
+export async function deleteSavedRecipe(index: number): Promise<void> {
+	const existing = await getSavedRecipes();
+	await chrome.storage.sync.set({
+		savedRecipes: existing.filter((_, i) => i !== index),
+	});
+}

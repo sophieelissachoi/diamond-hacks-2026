@@ -1,10 +1,17 @@
 import { useState } from "react";
-import { Box, Heading, Button } from "@chakra-ui/react";
+import {
+	VStack,
+	Heading,
+	Button,
+	Grid,
+	GridItem,
+	HStack,
+} from "@chakra-ui/react";
 import UploadReceipt from "./Upload";
 import TakePicture from "./TakePicture";
-import EditConfirmation from "./EditConfirmation";
-import { type PantryPage, type Page } from "../types";
+import { type PantryPage, type Page, type Ingredient } from "../types";
 import SubPantry from "./SubPantry";
+import EditConfirmation from "./EditConfirmation";
 
 export default function Pantry({
 	setCurrentPage,
@@ -14,8 +21,7 @@ export default function Pantry({
 	const [currentPagePantry, setCurrentPagePantry] =
 		useState<PantryPage>("pantry");
 	const [category, setCategory] = useState<string>("");
-	const [ingredients, setIngredients] = useState<string[]>([]);
-	const [editButtonClicked, setEditButtonClicked] = useState<boolean>(false);
+	const [ingredients, setIngredients] = useState<Ingredient[]>([]);
 
 	const categories = [
 		"Dairy",
@@ -26,6 +32,7 @@ export default function Pantry({
 		"Seasonings",
 		"Protein",
 		"Other",
+		"See All",
 	];
 
 	if (currentPagePantry !== "pantry") {
@@ -43,16 +50,17 @@ export default function Pantry({
 				)}
 				{currentPagePantry === "take-picture" && (
 					<TakePicture
-						onDone={(sortedIngredients) => {
-							setIngredients(sortedIngredients);
-							setCurrentPagePantry("edit-confirmation");
-						}}
+					// onDone={(sortedIngredients) => {
+					// 	setIngredients(sortedIngredients);
+					// 	setCurrentPagePantry("edit-confirmation");
+					// }}
 					/>
 				)}
 				{currentPagePantry === "edit-confirmation" && (
 					<EditConfirmation
 						ingredients={ingredients}
-						editButtonClicked={editButtonClicked}
+						setIngredients={setIngredients}
+						editButtonClicked={false}
 					/>
 				)}
 			</>
@@ -60,39 +68,49 @@ export default function Pantry({
 	}
 
 	return (
-		<Box p={6}>
-			<Button onClick={() => setCurrentPage("home")}>← Back</Button>
-			<Heading size="lg">Your Pantry</Heading>
-
-			<Box mt={4}>
-				{categories.map((c) => (
-					<Button
-						key={c}
-						onClick={() => {
-							setCurrentPagePantry("subpantry");
-							setCategory(c);
-						}}
-					>
-						{c}
-					</Button>
-				))}
-
-				{/*upload and picture*/}
+		<VStack
+			p={6}
+			mt={20}
+			w="300px"
+			h="300px"
+			display="flex"
+			justifyContent="center"
+			alignItems="center"
+		>
+			<HStack>
 				<Button onClick={() => setCurrentPagePantry("upload-receipt")}>
 					Upload Receipt
 				</Button>
+
 				<Button onClick={() => setCurrentPagePantry("take-picture")}>
-					Take Picture of Reciept
+					Take Picture of Reciept/Pantry
 				</Button>
-				<Button
-					onClick={() => {
-						setCurrentPagePantry("edit-confirmation");
-						setEditButtonClicked(true);
-					}}
-				>
-					Edit Pantry
-				</Button>
-			</Box>
-		</Box>
+			</HStack>
+			<HStack>
+				<Button onClick={() => setCurrentPage("home")}>← Back</Button>
+				<Heading size="lg">Your Pantry</Heading>
+			</HStack>
+
+			<Grid
+				mt={4}
+				gap={2}
+				templateColumns="repeat(3, 1fr)"
+			>
+				{categories.map((c) => (
+					<GridItem key={c}>
+						<Button
+							w="100px"
+							h="100px"
+							onClick={() => {
+								setCurrentPagePantry("subpantry");
+								setCategory(c);
+							}}
+						>
+							{c}
+						</Button>
+					</GridItem>
+				))}
+			</Grid>
+		</VStack>
 	);
 }

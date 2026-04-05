@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Heading, Button } from "@chakra-ui/react";
+import { useState } from "react";
+import { Heading, Button, Grid, GridItem, VStack } from "@chakra-ui/react";
 import { type Page, type PantryPage } from "./types";
 
 import SearchRecipe from "./pages/Search";
@@ -15,13 +15,6 @@ function App() {
 		"Saved Recipes",
 		"Scan Recipe",
 		"Pantry",
-	];
-
-	const pantryPage: PantryPage[] = [
-		"subpantry",
-		"upload-receipt",
-		"take-picture",
-		"edit-confirmation",
 	];
 
 	if (currentPage !== "home") {
@@ -42,18 +35,35 @@ function App() {
 	}
 
 	return (
-		<>
+		<VStack
+			w="300px"
+			h="300px"
+			display="flex"
+			justifyContent="center"
+			alignItems="center"
+		>
 			<Heading> Mise </Heading>
 
 			{/* ---- home page nav Buttons ---- */}
-			<div
-				style={{ display: "flex", flexDirection: "column", gap: 8, padding: 16 }}
+			<Grid
+				templateColumns="repeat(2, 1fr)"
+				gap={2}
 			>
 				{pages.map((p) => (
-					<Button onClick={() => setCurrentPage(p)}>{p}</Button>
+					<GridItem key={p}>
+						<Button
+							w="100px"
+							h="100px"
+							whiteSpace="normal"
+							wordBreak="break-word"
+							onClick={() => setCurrentPage(p)}
+						>
+							{p}
+						</Button>
+					</GridItem>
 				))}
-			</div>
-		</>
+			</Grid>
+		</VStack>
 	);
 }
 
