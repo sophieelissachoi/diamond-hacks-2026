@@ -69,8 +69,7 @@ app.post("/find-ingredients", async (req, res) => {
 			- "title": title of the recipe
       - "have": list of ingredients on the page that are in this pantry: ${JSON.stringify(pantry)}
       - "need": list of ingredients on the page that are NOT in this pantry: ${JSON.stringify(pantry)}
-      - "substitute": list of ingredients on the page that the user doesn't have, but has similar ingredients they do have in their pantry that can be a substitution.
-			show what they can substitute by formatting it like 'x can substitute y'
+      - "substitute": ingredients the user lacks but can substitute: format as "x can substitute y
 
       Step 2: Use the evaluate action to run this JavaScript on the page to highlight ingredients:
       - For each ingredient the user HAS, find its element and set style.backgroundColor to "lightgreen"

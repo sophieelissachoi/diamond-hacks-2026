@@ -66,6 +66,11 @@ export default function SearchRecipe({
 		if (!result) return;
 		await saveFindRecipe({ ...result, recipeType });
 		setSaved(true);
+		setTimeout(() => {
+			setSaved(false);
+			setResult(null); // clear the result
+			setRecipeType(""); // clear the search input
+		}, 2000);
 	}
 
 	return (
