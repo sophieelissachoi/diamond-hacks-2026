@@ -53,11 +53,22 @@ Results are highlighted directly on the page and also displayed within the exten
 1. Clone the repository:
    ```bash
    git clone https://github.com/your-username/mise.git
-   cd mise
+   cd frontend
    ```
 
-2. Install dependencies:
+2. Install frontend dependencies:
    ```bash
+   npm install
+   ```
+
+3. Build the extension:
+   ```bash
+   npm run build
+   ```
+
+2. Install backend dependencies:
+   ```bash
+   cd backend
    npm install
    ```
 
