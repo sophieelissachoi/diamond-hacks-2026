@@ -112,6 +112,6 @@ Results are highlighted directly on the page and also displayed within the exten
 
 ---
 
-## Built at [Hackathon Name]
+## Built at Diamond Hacks 2026
 
 *Mise was built to solve the small, everyday frustrations of cooking — so that getting into the kitchen feels less like a chore and more like something you can just dive into.*
