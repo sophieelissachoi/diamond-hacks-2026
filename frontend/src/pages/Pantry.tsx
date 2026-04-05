@@ -15,6 +15,7 @@ import TakePicture from "./TakePicture";
 import { type PantryPage, type Page, type RawIngredients } from "../types";
 import SubPantry from "./SubPantry";
 import EditConfirmation from "./EditConfirmation";
+import { FaUpload, FaCamera } from "react-icons/fa";
 
 export default function Pantry({
 	setCurrentPage,
@@ -93,7 +94,7 @@ export default function Pantry({
 			position="relative"
 			p={6}
 			bg="#F7F3EC"
-			w="430px"
+			w="450px"
 			h="560px"
 			display="flex"
 			flexDirection="column"
@@ -139,7 +140,10 @@ export default function Pantry({
 						_hover={{ bg: "#2D5016" }}
 						onClick={() => setCurrentPagePantry("upload-receipt")}
 					>
-						Upload Receipt
+						<HStack gap={2}>
+							<Text>Upload Receipt</Text>
+							<FaUpload />
+						</HStack>
 					</Button>
 					<Button
 						fontFamily="'Inter', sans-serif"
@@ -149,7 +153,10 @@ export default function Pantry({
 						_hover={{ bg: "#2D5016" }}
 						onClick={() => setCurrentPagePantry("take-picture")}
 					>
-						Take Picture of Reciept/Pantry
+						<HStack gap={2}>
+							<Text>Take Photo of Reciept/Pantry</Text>
+							<FaCamera />
+						</HStack>
 					</Button>
 				</HStack>
 

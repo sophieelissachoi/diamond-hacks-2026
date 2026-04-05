@@ -15,6 +15,7 @@ import SearchRecipe from "./pages/Search";
 import SavedRecipes from "./pages/Saved";
 import ScanRecipes from "./pages/Scan";
 import Pantry from "./pages/Pantry";
+import { FaSearch, FaRegSave, FaExpand, FaFolder } from "react-icons/fa";
 
 function App() {
 	const [currentPage, setCurrentPage] = useState<Page | PantryPage>("home");
@@ -24,6 +25,8 @@ function App() {
 		"Scan Recipe",
 		"Pantry",
 	];
+
+	const icons = [<FaSearch />, <FaRegSave />, <FaExpand />, <FaFolder />];
 
 	if (currentPage !== "home") {
 		return (
@@ -85,7 +88,7 @@ function App() {
 				gap={3}
 				w="100%"
 			>
-				{pages.map((p) => (
+				{pages.map((p, i) => (
 					<GridItem key={p}>
 						<Button
 							w="100%"
@@ -112,7 +115,10 @@ function App() {
 							_active={{ bg: "#2D5016", color: "white" }}
 							transition="all 0.2s"
 						>
-							{p}
+							<VStack>
+								<Text>{p}</Text>
+								<Text>{icons[i]}</Text>
+							</VStack>
 						</Button>
 					</GridItem>
 				))}
