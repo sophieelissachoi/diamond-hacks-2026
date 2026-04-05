@@ -81,7 +81,7 @@ export default function ScanRecipes({
 			h="500px"
 			display="flex"
 			flexDirection="column"
-			overflow="hidden"
+			overflow="scroll"
 		>
 			<VStack
 				align="start"
@@ -226,7 +226,7 @@ export default function ScanRecipes({
 										mt={1}
 									>
 										{Array.isArray(recipeInfo.ingredients)
-											? recipeInfo.ingredients.join(", ")
+											? recipeInfo.ingredients.join("\n")
 											: recipeInfo.ingredients}
 									</Text>
 
@@ -246,7 +246,7 @@ export default function ScanRecipes({
 										mt={1}
 									>
 										{Array.isArray(recipeInfo.instructions)
-											? recipeInfo.instructions.join(", ")
+											? recipeInfo.instructions.join("\n")
 											: recipeInfo.instructions}
 									</Text>
 
@@ -266,7 +266,7 @@ export default function ScanRecipes({
 										mt={1}
 									>
 										{Array.isArray(recipeInfo.appliances)
-											? recipeInfo.appliances.join(", ")
+											? recipeInfo.appliances.join("\n")
 											: recipeInfo.appliances}
 									</Text>
 								</Box>

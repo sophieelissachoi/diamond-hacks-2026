@@ -20,28 +20,33 @@ app.post("/scan-picture", async (req, res) => {
 	const { picture, fileName, contentType } = req.body;
 	if (!picture) return res.status(400).json({ error: "Missing picture" });
 
-	const imageBuffer = Buffer.from(picture.split(",")[1], "base64");
-	const tempPath = path.join(os.tmpdir(), fileName);
-	fs.writeFileSync(tempPath, imageBuffer);
+	try {
+		const imageBuffer = Buffer.from(picture.split(",")[1], "base64");
+		const tempPath = path.join(os.tmpdir(), fileName);
+		fs.writeFileSync(tempPath, imageBuffer);
 
-	const workspace = await client.workspaces.create({ name: "scan-workspace" });
-	await client.workspaces.upload(workspace.id, tempPath);
+		const workspace = await client.workspaces.create({ name: "scan-workspace" });
+		await client.workspaces.upload(workspace.id, tempPath);
 
-	const result = await client.run(
-		`Analyze this receipt image (${fileName}) and return a JSON object with these keys:
-      name: array of product names
-      category: array of categories (dairy, fruit, vegetables, snacks, grains, seasonings, protein, other)
-      food: array of simplified food names (e.g. "Horizon Milk" → "milk")
-      quantity: array of quantities bought
-    Return only valid JSON, no explanation and no formatting. no additional text like (here is the valid json) or LLM result: json`,
-		{ workspaceId: workspace.id },
-	);
+		const result = await client.run(
+			`Analyze this receipt image (${fileName}) and return a JSON object with these keys:
+			name: array of product names
+			category: array of categories (dairy, fruit, vegetables, snacks, grains, seasonings, protein, other)
+			food: array of simplified food names (e.g. "Horizon Milk" → "milk")
+			quantity: array of quantities bought
+			Return only valid JSON, no explanation and no formatting. no additional text like (here is the valid json) or LLM result: json`,
+			{ workspaceId: workspace.id },
+		);
 
-	fs.unlinkSync(tempPath);
-	await client.workspaces.delete(workspace.id);
+		fs.unlinkSync(tempPath);
+		await client.workspaces.delete(workspace.id);
 
-	console.log(result.output);
-	return res.json({ output: result.output });
+		console.log("LLM result:", result.output);
+		return res.json({ output: result.output });
+	} catch (err) {
+		console.error("scan-picture error:", err);
+		return res.status(500).json({ error: String(err) });
+	}
 });
 
 // scans the website the user is on to see if they have the ingredients they need
