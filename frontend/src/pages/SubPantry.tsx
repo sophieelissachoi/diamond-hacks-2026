@@ -53,13 +53,17 @@ export default function SubPantry({ setCurrentPagePantry, category }: Props) {
 	}
 
 	function handleDelete(index: number) {
+		const targetIngredient = ingredients[index]; // capture before async call
+
 		chrome.storage.local.get(["pantry"], (result) => {
 			const all: Ingredient[] = Array.isArray(result.pantry) ? result.pantry : [];
 			let deleted = false;
+
 			const updated = all.filter((i) => {
 				if (
 					!deleted &&
-					i.food === ingredients[index].food &&
+					i.food === targetIngredient.food &&
+					i.name === targetIngredient.name &&
 					i.category === category
 				) {
 					deleted = true;
@@ -67,6 +71,7 @@ export default function SubPantry({ setCurrentPagePantry, category }: Props) {
 				}
 				return true;
 			});
+
 			chrome.storage.local.set({ pantry: updated }, () => {
 				setIngredients((prev) => prev.filter((_, i) => i !== index));
 			});
