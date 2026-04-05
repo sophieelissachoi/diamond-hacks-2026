@@ -1,13 +1,5 @@
 import { Box, Text } from "@chakra-ui/react";
-
-interface Ingredient {
-	name: string;
-	category: string;
-	food: string;
-	quantity: string;
-	location?: string;
-	note?: string;
-}
+import { type Ingredient } from "../types";
 
 interface Props {
 	ingredient: Ingredient;
