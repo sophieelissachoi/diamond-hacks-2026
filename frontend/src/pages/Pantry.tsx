@@ -45,7 +45,12 @@ export default function Pantry({
 	if (currentPagePantry !== "pantry") {
 		return (
 			<>
-				{currentPagePantry === "subpantry" && <SubPantry category={category} />}
+				{currentPagePantry === "subpantry" && (
+					<SubPantry
+						setCurrentPagePantry={setCurrentPagePantry}
+						category={category}
+					/>
+				)}
 				{currentPagePantry === "upload-receipt" && (
 					<UploadReceipt
 						setCurrentPagePantry={setCurrentPagePantry}
