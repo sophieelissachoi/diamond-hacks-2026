@@ -34,7 +34,7 @@ app.post("/scan-picture", async (req, res) => {
 			category: array of categories (dairy, fruit, vegetables, snacks, grains, seasonings, protein, other)
 			food: array of simplified food names (e.g. "Horizon Milk" → "milk")
 			quantity: array of quantities bought
-			Return only valid JSON, no explanation and no formatting. no additional text like (here is the valid json) or LLM result: json`,
+			Return ONLY valid JSON, no explanation and no formatting. no additional text like (here is the valid json) or LLM result: json`,
 			{ workspaceId: workspace.id },
 		);
 
@@ -59,22 +59,28 @@ app.post("/find-ingredients", async (req, res) => {
 
 	try {
 		const result = await client.run(
-			`In ${url}, return a json object with the following. 
-			"link": "the url of the recipe",
-      "ingredients": "summary of ingredients",
-      "instructions": "summary of instructions with tips",
-      "appliances": "required appliances"
-			Also, scroll down to the recipe list and do html injection by highlighting the following lines in the recipe list:
-			have (light red): contains the ingredients on the website that are in the user’s ${pantry}.
-      need (light yellow): contains the ingredients on the website that are not in the user’s ${pantry}.
-      substitute: contains the ingredients on the website that the user does not have in their ${pantry}, 
-			but can be substituted with the user’s ingredients in their chrome storage. Map the ingredients that can be substituted to existing ingredients in the user’s ${pantry}.
-			Return only valid JSON, no explanation and no formatting. no additional text like (here is the valid json) or LLM result: json`,
+			`Go to ${url} and complete these steps in order:
+
+      Step 1: Extract the recipe data and build a JSON object with these keys:
+      - "link": the url of the recipe
+      - "ingredients": summary of ingredients
+      - "instructions": summary of instructions with tips
+      - "appliances": required appliances
+      - "have": list of ingredients on the page that are in this pantry: ${JSON.stringify(pantry)}
+      - "need": list of ingredients on the page that are NOT in this pantry: ${JSON.stringify(pantry)}
+      - "substitute": object mapping ingredients the user doesn't have to similar ingredients they do have in their pantry
+
+      Step 2: Use the evaluate action to run this JavaScript on the page to highlight ingredients:
+      - For each ingredient the user HAS, find its element and set style.backgroundColor to "lightgreen"
+      - For each ingredient the user NEEDS, find its element and set style.backgroundColor to "lightyellow"
+      - For each ingredient that can be SUBSTITUTED, find its element and set style.backgroundColor to "lightblue"
+
+      Step 3: Return ONLY the JSON object from Step 1. No explanation, no markdown, no extra text.`,
 		);
 		return res.json({ output: result.output });
 	} catch (err) {
 		console.error("Browser Use error:", err);
-		return res.status(500).json({ error: "Failed to run browser task " });
+		return res.status(500).json({ error: "Failed to run browser task" });
 	}
 });
 

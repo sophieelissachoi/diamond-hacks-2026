@@ -116,7 +116,7 @@ export default function TakePicture({ setCurrentPagePantry, onDone }: Props) {
 				return;
 			}
 
-			const parsed = JSON.parse(data.output);
+			const parsed = data.output;
 			const ingredients: RawIngredients = {
 				name: parsed.name,
 				category: parsed.category,
