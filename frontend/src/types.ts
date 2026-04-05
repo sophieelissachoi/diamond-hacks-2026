@@ -32,6 +32,7 @@ export interface RecipeInfo {
 	have: string[];
 	need: string[];
 	substitute: string[];
+	title: string;
 	link: string;
 	ingredients: string[];
 	instructions: string;

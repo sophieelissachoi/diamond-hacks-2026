@@ -67,7 +67,37 @@ export default function ScanRecipes({
 			});
 			const data = await res.json();
 			setRecipeInfo(data.output);
-			setRecipeType(url ?? "Scanned Recipe"); // use the URL as the recipe type
+			setRecipeType(url ?? "Scanned Recipe");
+
+			const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+			const tabId = tabs[0].id!;
+
+			await chrome.scripting.executeScript({
+				target: { tabId },
+				func: (have: string[], need: string[], substitute: object) => {
+					const allText = document.querySelectorAll("li, p, span, td");
+
+					allText.forEach((el) => {
+						const text = el.textContent?.toLowerCase() ?? "";
+
+						const isHave = have.some((i) => text.includes(i.toLowerCase()));
+						const isNeed = need.some((i) => text.includes(i.toLowerCase()));
+						const isSub = Object.keys(substitute).some((i) =>
+							text.includes(i.toLowerCase()),
+						);
+
+						if (isHave) (el as HTMLElement).style.backgroundColor = "lightgreen";
+						else if (isSub) (el as HTMLElement).style.backgroundColor = "lightblue";
+						else if (isNeed)
+							(el as HTMLElement).style.backgroundColor = "lightyellow";
+					});
+				},
+				args: [
+					data.output.have ?? [],
+					data.output.need ?? [],
+					data.output.substitute ?? {},
+				],
+			});
 		} finally {
 			setIsLoading(false);
 		}
@@ -174,6 +204,7 @@ export default function ScanRecipes({
 								flex={1}
 								overflowY="auto"
 								mt={4}
+								mb={2}
 								css={{
 									"&::-webkit-scrollbar": { width: "4px" },
 									"&::-webkit-scrollbar-track": { background: "transparent" },
@@ -183,6 +214,74 @@ export default function ScanRecipes({
 									},
 								}}
 							>
+								<Box
+									bg="white"
+									borderRadius="2xl"
+									border="1.5px solid"
+									borderColor="#C8D8B8"
+									p={4}
+								>
+									<Text
+										fontFamily="'Playfair Display', serif"
+										fontSize="sm"
+										fontWeight="700"
+										color="#1E3A0F"
+									>
+										Have:
+									</Text>
+
+									<Text
+										fontFamily="'Inter', sans-serif"
+										fontSize="xs"
+										color="#4A5240"
+										mt={1}
+									>
+										{Array.isArray(recipeInfo.have)
+											? recipeInfo.have.join(", ")
+											: recipeInfo.have}
+									</Text>
+
+									<Text
+										fontFamily="'Playfair Display', serif"
+										fontSize="sm"
+										fontWeight="700"
+										color="#1E3A0F"
+									>
+										Need:
+									</Text>
+
+									<Text
+										fontFamily="'Inter', sans-serif"
+										fontSize="xs"
+										color="#4A5240"
+										mt={1}
+									>
+										{Array.isArray(recipeInfo.need)
+											? recipeInfo.need.join(", ")
+											: recipeInfo.need}
+									</Text>
+
+									<Text
+										fontFamily="'Playfair Display', serif"
+										fontSize="sm"
+										fontWeight="700"
+										color="#1E3A0F"
+									>
+										Substitute:
+									</Text>
+
+									<Text
+										fontFamily="'Inter', sans-serif"
+										fontSize="xs"
+										color="#4A5240"
+										mt={1}
+									>
+										{Array.isArray(recipeInfo.substitute)
+											? recipeInfo.substitute.join(", ")
+											: recipeInfo.substitute}
+									</Text>
+								</Box>
+
 								<Box
 									bg="white"
 									borderRadius="2xl"
@@ -226,7 +325,7 @@ export default function ScanRecipes({
 										mt={1}
 									>
 										{Array.isArray(recipeInfo.ingredients)
-											? recipeInfo.ingredients.join("\n")
+											? recipeInfo.ingredients.join(", ")
 											: recipeInfo.ingredients}
 									</Text>
 
@@ -246,7 +345,7 @@ export default function ScanRecipes({
 										mt={1}
 									>
 										{Array.isArray(recipeInfo.instructions)
-											? recipeInfo.instructions.join("\n")
+											? recipeInfo.instructions.join(", ")
 											: recipeInfo.instructions}
 									</Text>
 
@@ -266,7 +365,7 @@ export default function ScanRecipes({
 										mt={1}
 									>
 										{Array.isArray(recipeInfo.appliances)
-											? recipeInfo.appliances.join("\n")
+											? recipeInfo.appliances.join(", ")
 											: recipeInfo.appliances}
 									</Text>
 								</Box>

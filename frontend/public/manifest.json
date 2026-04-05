@@ -7,5 +7,5 @@
 		"default_popup": "index.html"
 	},
 	"permissions": ["storage", "tabs", "camera"],
-	"host_permissions": ["http://localhost:3001/*"]
+	"host_permissions": ["http://localhost:3001/*", "<all_urls>"]
 }

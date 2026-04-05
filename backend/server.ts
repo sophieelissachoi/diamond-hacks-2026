@@ -66,6 +66,7 @@ app.post("/find-ingredients", async (req, res) => {
       - "ingredients": summary of ingredients
       - "instructions": summary of instructions with tips
       - "appliances": required appliances
+			- "title": title of the recipe
       - "have": list of ingredients on the page that are in this pantry: ${JSON.stringify(pantry)}
       - "need": list of ingredients on the page that are NOT in this pantry: ${JSON.stringify(pantry)}
       - "substitute": object mapping ingredients the user doesn't have to similar ingredients they do have in their pantry
@@ -77,6 +78,7 @@ app.post("/find-ingredients", async (req, res) => {
 
       Step 3: Return ONLY the JSON object from Step 1. No explanation, no markdown, no extra text.`,
 		);
+		console.log("Result: ", result);
 		return res.json({ output: result.output });
 	} catch (err) {
 		console.error("Browser Use error:", err);
@@ -105,6 +107,7 @@ app.post("/find-recipe", async (req, res) => {
     {
       "link": "the url of the recipe",
       "ingredients": "summary of ingredients",
+			"title": "title of the recipe",
       "instructions": "summary of instructions with tips",
       "appliances": "required appliances"
     }`,

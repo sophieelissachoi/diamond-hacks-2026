@@ -81,6 +81,7 @@ export default function Pantry({
 							setTimeout(() => setShowSaved(false), 2000);
 							setCurrentPagePantry("pantry");
 						}}
+						onCancel={() => setCurrentPagePantry("pantry")}
 					/>
 				)}
 			</>
