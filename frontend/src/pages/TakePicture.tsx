@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
 	Heading,
 	Button,
@@ -37,6 +37,27 @@ export default function TakePicture({ setCurrentPagePantry, onDone }: Props) {
 		}
 	}
 
+	useEffect(() => {
+		let cancelled = false;
+		navigator.mediaDevices
+			.getUserMedia({ video: true })
+			.then((stream) => {
+				if (cancelled) return;
+				if (videoRef.current) {
+					videoRef.current.srcObject = stream;
+					videoRef.current.play();
+					setStreaming(true);
+				}
+			})
+			.catch(() => {
+				if (!cancelled) setError("Could not access camera.");
+			});
+
+		return () => {
+			cancelled = true;
+		};
+	}, []);
+
 	function capturePhoto() {
 		if (!videoRef.current || !canvasRef.current) return;
 		const canvas = canvasRef.current;
@@ -55,11 +76,23 @@ export default function TakePicture({ setCurrentPagePantry, onDone }: Props) {
 	function retake() {
 		setPhoto(null);
 		setError("");
-		startCamera();
+		navigator.mediaDevices
+			.getUserMedia({ video: true })
+			.then((stream) => {
+				if (videoRef.current) {
+					videoRef.current.srcObject = stream;
+					videoRef.current.play();
+					setStreaming(true);
+				}
+			})
+			.catch(() => {
+				setError("Could not access camera.");
+			});
 	}
 
 	async function handleScan() {
 		if (!photo) return;
+		alert("Photo size: " + Math.round(photo.length / 1024) + "kb");
 		setLoading(true);
 		setError("");
 
@@ -92,7 +125,8 @@ export default function TakePicture({ setCurrentPagePantry, onDone }: Props) {
 			};
 
 			onDone(ingredients);
-		} catch {
+		} catch (e) {
+			alert("Error: " + JSON.stringify(e)); // 👈 add this
 			setError("Request failed.");
 			setLoading(false);
 		}
@@ -163,12 +197,19 @@ export default function TakePicture({ setCurrentPagePantry, onDone }: Props) {
 						alignItems="center"
 						justifyContent="center"
 					>
-						{streaming ? (
-							<video
-								ref={videoRef}
-								style={{ width: "100%", height: "100%", objectFit: "cover" }}
-							/>
-						) : (
+						<video
+							ref={videoRef}
+							style={{
+								width: "100%",
+								height: "100%",
+								objectFit: "cover",
+								display: streaming ? "block" : "none",
+								transform: "scaleX(-1)",
+							}}
+							autoPlay
+							playsInline
+						/>
+						{!streaming && (
 							<Text
 								color="#B0BEA4"
 								fontSize="sm"

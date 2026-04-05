@@ -46,7 +46,7 @@ app.post("/scan-picture", async (req, res) => {
 
 // scans the website the user is on to see if they have the ingredients they need
 app.post("/find-ingredients", async (req, res) => {
-	const { url } = req.body;
+	const { url, pantry } = req.body;
 
 	if (!url) {
 		return res.status(400).json({ error: "No url found" });
@@ -54,16 +54,16 @@ app.post("/find-ingredients", async (req, res) => {
 
 	try {
 		const result = await client.run(
-			`In ${url}, scroll down to the recipe list and return a json object with the following. 
-      have: contains the ingredients on the website that are in the user’s chrome storage.
-      need: contains the ingredients on the website that are not in the user’s chrome storage.
-      substitute: contains the ingredients on the website that the user does not have in their chrome storage, 
-			but can be substituted with the user’s ingredients in their chrome storage. Map the ingredients that can be substituted to existing ingredients in the user’s chrome storage.
-			Also include the following
+			`In ${url}, return a json object with the following. 
 			"link": "the url of the recipe",
       "ingredients": "summary of ingredients",
       "instructions": "summary of instructions with tips",
       "appliances": "required appliances"
+			Also, scroll down to the recipe list and do html injection by highlighting the following lines in the recipe list:
+			have (light red): contains the ingredients on the website that are in the user’s ${pantry}.
+      need (light yellow): contains the ingredients on the website that are not in the user’s ${pantry}.
+      substitute: contains the ingredients on the website that the user does not have in their ${pantry}, 
+			but can be substituted with the user’s ingredients in their chrome storage. Map the ingredients that can be substituted to existing ingredients in the user’s ${pantry}.
 			Return only valid JSON, no explanation and no formatting. no additional text like (here is the valid json) or LLM result: json`,
 		);
 		return res.json({ output: result.output });

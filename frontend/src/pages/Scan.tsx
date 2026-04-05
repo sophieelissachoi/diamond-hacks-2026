@@ -8,7 +8,12 @@ import {
 	Spinner,
 	Text,
 } from "@chakra-ui/react";
-import { type Page, type PantryPage, type RecipeInfo } from "../types";
+import {
+	type Page,
+	type PantryPage,
+	type RecipeInfo,
+	type Ingredient,
+} from "../types";
 import { saveFindRecipe } from "../storage";
 
 export default function ScanRecipes({
@@ -21,8 +26,16 @@ export default function ScanRecipes({
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [saved, setSaved] = useState(false);
 	const [recipeType, setRecipeType] = useState("");
+	const [pantry, setPantry] = useState<Ingredient[]>([]);
 
 	useEffect(() => {
+		chrome.storage.local.get(["pantry"], (result) => {
+			const items: Ingredient[] = Array.isArray(result.pantry)
+				? result.pantry
+				: [];
+			setPantry(items);
+		});
+
 		chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 			setUrl(tabs[0].url);
 		});
@@ -50,7 +63,7 @@ export default function ScanRecipes({
 			const res = await fetch("http://localhost:3001/find-ingredients", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ url }),
+				body: JSON.stringify({ url, pantry }),
 			});
 			const data = await res.json();
 			setRecipeInfo(data.output);
@@ -204,7 +217,7 @@ export default function ScanRecipes({
 										fontWeight="700"
 										color="#1E3A0F"
 									>
-										Ingredients You Have
+										Ingredients
 									</Text>
 									<Text
 										fontFamily="'Inter', sans-serif"
@@ -212,9 +225,9 @@ export default function ScanRecipes({
 										color="#4A5240"
 										mt={1}
 									>
-										{Array.isArray(recipeInfo.have)
-											? recipeInfo.have.join(", ")
-											: recipeInfo.have}
+										{Array.isArray(recipeInfo.ingredients)
+											? recipeInfo.ingredients.join(", ")
+											: recipeInfo.ingredients}
 									</Text>
 
 									<Text
@@ -224,7 +237,7 @@ export default function ScanRecipes({
 										color="#1E3A0F"
 										mt={3}
 									>
-										Ingredients You Need
+										Instructions
 									</Text>
 									<Text
 										fontFamily="'Inter', sans-serif"
@@ -232,9 +245,9 @@ export default function ScanRecipes({
 										color="#4A5240"
 										mt={1}
 									>
-										{Array.isArray(recipeInfo.need)
-											? recipeInfo.need.join(", ")
-											: recipeInfo.need}
+										{Array.isArray(recipeInfo.instructions)
+											? recipeInfo.instructions.join(", ")
+											: recipeInfo.instructions}
 									</Text>
 
 									<Text
@@ -244,7 +257,7 @@ export default function ScanRecipes({
 										color="#1E3A0F"
 										mt={3}
 									>
-										Substitutions
+										Applicances
 									</Text>
 									<Text
 										fontFamily="'Inter', sans-serif"
@@ -252,9 +265,9 @@ export default function ScanRecipes({
 										color="#4A5240"
 										mt={1}
 									>
-										{Array.isArray(recipeInfo.substitute)
-											? recipeInfo.substitute.join(", ")
-											: recipeInfo.substitute}
+										{Array.isArray(recipeInfo.appliances)
+											? recipeInfo.appliances.join(", ")
+											: recipeInfo.appliances}
 									</Text>
 								</Box>
 							</Box>
