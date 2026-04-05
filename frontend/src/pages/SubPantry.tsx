@@ -31,7 +31,7 @@ export default function SubPantry({ setCurrentPagePantry, category }: Props) {
 			h="500px"
 			display="flex"
 			flexDirection="column"
-			overflow="hidden"
+			overflow="scroll"
 		>
 			<VStack
 				align="start"
