@@ -103,8 +103,10 @@ app.post("/find-ingredients", async (req, res) => {
 				}),
 			} as any,
 		);
-		console.log("Result: ", result);
-		return res.json({ output: result.output });
+		const raw = result.output;
+		const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
+		console.log("Result: ", parsed);
+		return res.json({ output: parsed });
 	} catch (err) {
 		console.error("Browser Use error:", err);
 		return res.status(500).json({ error: "Failed to run browser task" });
