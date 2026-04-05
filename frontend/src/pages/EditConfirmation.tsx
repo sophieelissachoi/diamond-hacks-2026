@@ -1,6 +1,6 @@
 import { Heading, Button, Box, Text } from "@chakra-ui/react";
 import { type Ingredient } from "../types";
-import IngredientCard from "../components/IngredientCard";
+//import IngredientCard from "../components/IngredientCard";
 
 interface Props {
 	ingredients: Ingredient[];
@@ -10,23 +10,34 @@ interface Props {
 
 export default function EditConfirmation({
 	ingredients,
-	setIngredients,
+	//setIngredients,
 	editButtonClicked,
 }: Props) {
-	function handleChange(index: number, updated: Ingredient) {
-		setIngredients((prev) =>
-			prev.map((item, i) => (i === index ? updated : item)),
-		);
-	}
-
 	function handleConfirm() {
-		console.log("Confirmed ingredients:", ingredients);
+		chrome.storage.local.get(["pantry"], (result) => {
+			const existing: Ingredient[] = result.pantry || [];
+			const updated = [...existing, ...ingredients];
+			chrome.storage.local.set({ pantry: updated }, () => {
+				console.log("Saved to pantry:", updated);
+			});
+		});
 	}
 
 	return (
 		<Box p={4}>
 			<Heading size="md">{editButtonClicked ? "Add" : "Confirm"} Pantry</Heading>
-			<Text>{JSON.stringify(ingredients)}</Text>
+			<Text>{typeof ingredients}</Text>
+			{/* {ingredients.map((i) => (
+				<IngredientCard
+					key={i.name}
+					ingredient={{
+						name: i.name,
+						category: i.category,
+						food: i.food,
+						quantity: i.quantity,
+					}}
+				/>
+			))} */}
 			<Button
 				mt={4}
 				colorScheme="green"
