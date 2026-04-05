@@ -6,15 +6,38 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 				target: { tabId },
 				func: (have: string[], need: string[], substitute: string) => {
 					const allText = document.querySelectorAll("li, p, span, td");
+
+					// extract "y" from "x can substitute y" — the ingredient on the page
+					const subTargets = substitute
+						.split(",")
+						.map((s) => {
+							const parts = s.toLowerCase().split("can substitute");
+							return parts[1]?.trim() ?? "";
+						})
+						.filter(Boolean);
+
+					const stripQuantity = (s: string) =>
+						s
+							.toLowerCase()
+							.replace(
+								/[\d½¼¾⅓⅔]+\s*(g|kg|tablespoon|teaspoon|cup|oz|lb|ml|l)?\s*/gi,
+								"",
+							)
+							.replace(/\(.*?\)/g, "")
+							.trim();
+
+					const haveKeywords = have.map(stripQuantity).filter((k) => k.length > 3);
+					const needKeywords = need.map(stripQuantity).filter((k) => k.length > 3);
+
 					allText.forEach((el) => {
 						const text = el.textContent?.toLowerCase() ?? "";
-						const isHave = have.some((i) => text.includes(i.toLowerCase()));
-						const isNeed = need.some((i) => text.includes(i.toLowerCase()));
-						const isSub = substitute
-							.split(",")
-							.some((i) =>
-								text.includes(i.toLowerCase().split("can substitute")[1]?.trim() ?? ""),
-							);
+
+						// check substitute first so it takes priority over have
+						const isSub = subTargets.some((i) => i.length > 3 && text.includes(i));
+						const isHave = !isSub && haveKeywords.some((i) => text.includes(i));
+						const isNeed =
+							!isSub && !isHave && needKeywords.some((i) => text.includes(i));
+
 						if (isHave) (el as HTMLElement).style.backgroundColor = "#95fc7e";
 						else if (isSub) (el as HTMLElement).style.backgroundColor = "#fcf47e";
 						else if (isNeed) (el as HTMLElement).style.backgroundColor = "#fc7e89";

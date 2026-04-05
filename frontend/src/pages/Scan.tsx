@@ -55,6 +55,11 @@ export default function ScanRecipes({
 			recipeType,
 		});
 		setSaved(true);
+		setTimeout(() => {
+			setSaved(false);
+			setRecipeInfo(null);
+			setRecipeType("");
+		}, 1000);
 	}
 
 	const scanRecipe = async () => {
@@ -373,6 +378,20 @@ export default function ScanRecipes({
 									transition="all 0.2s"
 								>
 									{saved ? "Saved ✓" : "Save Recipe"}
+								</Button>
+								<Button
+									w="100%"
+									variant="ghost"
+									color="#7A8F6A"
+									fontFamily="'Inter', sans-serif"
+									fontSize="sm"
+									_hover={{ color: "#2D5016", bg: "transparent" }}
+									onClick={() => {
+										setRecipeInfo(null);
+										setRecipeType("");
+									}}
+								>
+									Cancel
 								</Button>
 							</Box>
 						</>
