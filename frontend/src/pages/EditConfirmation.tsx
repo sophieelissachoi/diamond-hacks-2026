@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heading, Button, Box, Text } from "@chakra-ui/react";
+import { Heading, Button, Box, Text, HStack } from "@chakra-ui/react";
 import { type Ingredient } from "../types";
 import IngredientCard from "../components/IngredientCard";
 
@@ -24,12 +24,14 @@ export default function EditConfirmation({
 }: Props) {
 	const [saved, setSaved] = useState(false);
 
-	const ingredientList = ingredients.name.map((name, i) => ({
-		name,
-		category: ingredients.category[i],
-		food: ingredients.food[i],
-		quantity: ingredients.quantity[i],
-	}));
+	const [ingredientList, setIngredientList] = useState(
+		ingredients.name.map((name, i) => ({
+			name,
+			category: ingredients.category[i],
+			food: ingredients.food[i],
+			quantity: ingredients.quantity[i],
+		})),
+	);
 
 	function handleConfirm() {
 		chrome.storage.local.get(["pantry"], (result) => {
@@ -83,11 +85,24 @@ export default function EditConfirmation({
 				</Box>
 			) : (
 				<>
-					{ingredientList.map((ingredient) => (
-						<IngredientCard
-							key={ingredient.name}
-							ingredient={ingredient}
-						/>
+					{ingredientList.map((ingredient, index) => (
+						<HStack
+							key={index}
+							align="start"
+						>
+							<IngredientCard ingredient={ingredient} />
+							<Button
+								size="xs"
+								variant="ghost"
+								color="#C08080"
+								_hover={{ color: "red.500", bg: "transparent" }}
+								onClick={() =>
+									setIngredientList((prev) => prev.filter((_, i) => i !== index))
+								}
+							>
+								✕
+							</Button>
+						</HStack>
 					))}
 					<Button
 						mt={4}
@@ -117,6 +132,14 @@ export default function EditConfirmation({
 						onClick={handleConfirm}
 					>
 						Confirm & Save
+					</Button>
+					<Button
+						variant="ghost"
+						color="#7A8F6A"
+						_hover={{ color: "#2D5016", bg: "transparent" }}
+						onClick={onBack}
+					>
+						Cancel
 					</Button>
 				</>
 			)}

@@ -27,3 +27,13 @@ export interface RawIngredients {
 	food: string[];
 	quantity: number[];
 }
+
+export interface RecipeInfo {
+	have: string[];
+	need: string[];
+	substitute: string[];
+	link: string;
+	ingredients: string[];
+	instructions: string;
+	appliances: string[];
+}

@@ -115,7 +115,7 @@ export default function SubPantry({ setCurrentPagePantry, category }: Props) {
 			{/* add new item */}
 			<HStack mb={4}>
 				<Input
-					placeholder="Food name"
+					placeholder="Type your food name (i.e. milk)"
 					value={newFood}
 					onChange={(e) => setNewFood(e.target.value)}
 					bg="white"

@@ -64,10 +64,11 @@ export default function Pantry({
 				)}
 				{currentPagePantry === "take-picture" && (
 					<TakePicture
-					// onDone={(sortedIngredients) => {
-					// 	setIngredients(sortedIngredients);
-					// 	setCurrentPagePantry("edit-confirmation");
-					// }}
+						setCurrentPagePantry={setCurrentPagePantry}
+						onDone={(sortedIngredients) => {
+							setIngredients(sortedIngredients);
+							setCurrentPagePantry("edit-confirmation");
+						}}
 					/>
 				)}
 				{currentPagePantry === "edit-confirmation" && (

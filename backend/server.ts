@@ -58,7 +58,12 @@ app.post("/find-ingredients", async (req, res) => {
       have: contains the ingredients on the website that are in the user’s chrome storage.
       need: contains the ingredients on the website that are not in the user’s chrome storage.
       substitute: contains the ingredients on the website that the user does not have in their chrome storage, 
-			but can be substituted with the user’s ingredients in their chrome storage. Map the ingredients that can be substituted to existing ingredients in the user’s chrome storage
+			but can be substituted with the user’s ingredients in their chrome storage. Map the ingredients that can be substituted to existing ingredients in the user’s chrome storage.
+			Also include the following
+			"link": "the url of the recipe",
+      "ingredients": "summary of ingredients",
+      "instructions": "summary of instructions with tips",
+      "appliances": "required appliances"
 			Return only valid JSON, no explanation and no formatting. no additional text like (here is the valid json) or LLM result: json`,
 		);
 		return res.json({ output: result.output });
