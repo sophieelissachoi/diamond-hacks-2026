@@ -15,10 +15,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 							.some((i) =>
 								text.includes(i.toLowerCase().split("can substitute")[1]?.trim() ?? ""),
 							);
-						if (isHave) (el as HTMLElement).style.backgroundColor = "lightgreen";
-						else if (isSub) (el as HTMLElement).style.backgroundColor = "lightblue";
-						else if (isNeed)
-							(el as HTMLElement).style.backgroundColor = "lightyellow";
+						if (isHave) (el as HTMLElement).style.backgroundColor = "#95fc7e";
+						else if (isSub) (el as HTMLElement).style.backgroundColor = "#fcf47e";
+						else if (isNeed) (el as HTMLElement).style.backgroundColor = "#fc7e89";
 					});
 				},
 				args: [message.have, message.need, message.substitute],
