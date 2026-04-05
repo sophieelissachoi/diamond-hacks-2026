@@ -76,7 +76,7 @@ app.post("/find-ingredients", async (req, res) => {
       - For each ingredient the user NEEDS, find its element and set style.backgroundColor to "lightyellow"
       - For each ingredient that can be SUBSTITUTED, find its element and set style.backgroundColor to "lightblue"
 
-      Step 3: Return ONLY the JSON object from Step 1. No explanation, no markdown, no extra text, no backticks, no \`\`\`json fences.`,
+      Step 3: Return ONLY the JSON object from Step 1. No explanation, no markdown, no extra text, no backticks, no \`\`\`json fences, no string. just json object only.`,
 		);
 		console.log("Result: ", result);
 		return res.json({ output: result.output });
