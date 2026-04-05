@@ -32,12 +32,12 @@ export default function Pantry({
 
 	const categories = [
 		"Dairy",
-		"Fruit",
 		"Vegetables",
-		"Snacks",
+		"Fruit",
 		"Grains",
-		"Seasonings",
 		"Protein",
+		"Seasonings",
+		"Snacks",
 		"Other",
 		"See All",
 	];
@@ -73,6 +73,7 @@ export default function Pantry({
 						ingredients={ingredients}
 						setIngredients={setIngredients}
 						editButtonClicked={false}
+						onBack={() => setCurrentPagePantry("pantry")}
 					/>
 				)}
 			</>
