@@ -6,6 +6,8 @@ import {
 	Grid,
 	GridItem,
 	HStack,
+	Divider,
+	Box,
 } from "@chakra-ui/react";
 import UploadReceipt from "./Upload";
 import TakePicture from "./TakePicture";
@@ -43,7 +45,17 @@ export default function Pantry({
 	if (currentPagePantry !== "pantry") {
 		return (
 			<>
-				<Button onClick={() => setCurrentPagePantry("pantry")}>← Back</Button>
+				<Button
+					variant="ghost"
+					color="#7A8F6A"
+					fontFamily="'Inter', sans-serif"
+					fontSize="sm"
+					px={0}
+					_hover={{ color: "#2D5016", bg: "transparent" }}
+					onClick={() => setCurrentPagePantry("pantry")}
+				>
+					← Back
+				</Button>
 				{currentPagePantry === "subpantry" && <SubPantry category={category} />}
 				{currentPagePantry === "upload-receipt" && (
 					<UploadReceipt
@@ -73,49 +85,111 @@ export default function Pantry({
 	}
 
 	return (
-		<VStack
+		<Box
 			p={6}
-			mt={20}
-			w="300px"
-			h="300px"
+			bg="#F7F3EC"
+			w="430px"
+			h="560px"
 			display="flex"
-			justifyContent="center"
-			alignItems="center"
+			flexDirection="column"
+			overflow="hidden"
 		>
-			<HStack>
-				<Button onClick={() => setCurrentPagePantry("upload-receipt")}>
-					Upload Receipt
-				</Button>
-
-				<Button onClick={() => setCurrentPagePantry("take-picture")}>
-					Take Picture of Reciept/Pantry
-				</Button>
-			</HStack>
-			<HStack>
-				<Button onClick={() => setCurrentPage("home")}>← Back</Button>
-				<Heading size="lg">Your Pantry</Heading>
-			</HStack>
-
-			<Grid
-				mt={4}
-				gap={2}
-				templateColumns="repeat(3, 1fr)"
+			<VStack
+				align="start"
+				gap={1}
+				mb={4}
 			>
-				{categories.map((c) => (
-					<GridItem key={c}>
-						<Button
-							w="100px"
-							h="100px"
-							onClick={() => {
-								setCurrentPagePantry("subpantry");
-								setCategory(c);
-							}}
-						>
-							{c}
-						</Button>
-					</GridItem>
-				))}
-			</Grid>
-		</VStack>
+				<Button
+					variant="ghost"
+					color="#7A8F6A"
+					fontFamily="'Inter', sans-serif"
+					fontSize="sm"
+					px={0}
+					_hover={{ color: "#2D5016", bg: "transparent" }}
+					onClick={() => setCurrentPage("home")}
+				>
+					← Back
+				</Button>
+				<Heading
+					fontFamily="'Playfair Display', serif"
+					fontSize="2xl"
+					fontWeight="700"
+					color="#1E3A0F"
+					letterSpacing="0.05em"
+				>
+					Your Pantry
+				</Heading>
+				<Divider
+					borderColor="#A8C090"
+					w="40px"
+					borderWidth="1.5px"
+				/>
+
+				<HStack mt={2}>
+					<Button
+						fontFamily="'Inter', sans-serif"
+						fontSize="sm"
+						bg="#7A8F6A"
+						color="white"
+						_hover={{ bg: "#2D5016" }}
+						onClick={() => setCurrentPagePantry("upload-receipt")}
+					>
+						Upload Receipt
+					</Button>
+					<Button
+						fontFamily="'Inter', sans-serif"
+						fontSize="sm"
+						bg="#7A8F6A"
+						color="white"
+						_hover={{ bg: "#2D5016" }}
+						onClick={() => setCurrentPagePantry("take-picture")}
+					>
+						Take Picture of Reciept/Pantry
+					</Button>
+				</HStack>
+
+				<Grid
+					mt={4}
+					gap={2}
+					templateColumns="repeat(3, 1fr)"
+				>
+					{categories.map((c) => (
+						<GridItem key={c}>
+							<Button
+								w="120px"
+								h="110px"
+								whiteSpace="normal"
+								wordBreak="break-word"
+								bg="#4A7C2F"
+								color="white"
+								border="1.5px solid"
+								borderColor="#4A7C2F"
+								borderRadius="2xl"
+								fontFamily="'Inter', sans-serif"
+								fontSize="sm"
+								fontWeight="500"
+								letterSpacing="0.02em"
+								_hover={{
+									bg: "white",
+									color: "#2D5016",
+									borderColor: "#C8D8B8",
+									transform: "translateY(-2px)",
+									boxShadow: "0 4px 12px rgba(74,124,47,0.25)",
+								}}
+								_active={{ bg: "#2D5016", color: "white" }}
+								transition="all 0.2s"
+								sx={{ whiteSpace: "normal", wordBreak: "break-word" }}
+								onClick={() => {
+									setCurrentPagePantry("subpantry");
+									setCategory(c);
+								}}
+							>
+								{c}
+							</Button>
+						</GridItem>
+					))}
+				</Grid>
+			</VStack>
+		</Box>
 	);
 }
