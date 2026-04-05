@@ -8,6 +8,7 @@ import {
 	HStack,
 	Divider,
 	Box,
+	Text,
 } from "@chakra-ui/react";
 import UploadReceipt from "./Upload";
 import TakePicture from "./TakePicture";
@@ -29,6 +30,7 @@ export default function Pantry({
 		food: [],
 		quantity: [],
 	});
+	const [showSaved, setShowSaved] = useState(false);
 
 	const categories = [
 		"Dairy",
@@ -73,7 +75,11 @@ export default function Pantry({
 						ingredients={ingredients}
 						setIngredients={setIngredients}
 						editButtonClicked={false}
-						onBack={() => setCurrentPagePantry("pantry")}
+						onBack={() => {
+							setShowSaved(true);
+							setTimeout(() => setShowSaved(false), 2000);
+							setCurrentPagePantry("pantry");
+						}}
 					/>
 				)}
 			</>
@@ -82,6 +88,7 @@ export default function Pantry({
 
 	return (
 		<Box
+			position="relative"
 			p={6}
 			bg="#F7F3EC"
 			w="430px"
@@ -186,6 +193,34 @@ export default function Pantry({
 					))}
 				</Grid>
 			</VStack>
+
+			{/* toast overlay */}
+			{showSaved && (
+				<Box
+					position="absolute"
+					bottom="24px"
+					left="50%"
+					transform="translateX(-50%)"
+					bg="whiteAlpha.900"
+					px={5}
+					py={3}
+					borderRadius="xl"
+					boxShadow="md"
+					border="1px solid"
+					borderColor="#C8D8B8"
+					animation="fadeInOut 2s ease-in-out"
+					pointerEvents="none"
+				>
+					<Text
+						color="#4A7C2F"
+						fontWeight="600"
+						fontSize="sm"
+						fontFamily="'Inter', sans-serif"
+					>
+						✓ Saved to Pantry
+					</Text>
+				</Box>
+			)}
 		</Box>
 	);
 }

@@ -39,14 +39,34 @@ export default function EditConfirmation({
 			const updated = [...existing, ...ingredientList];
 			chrome.storage.local.set({ pantry: updated }, () => {
 				setSaved(true);
-				setTimeout(() => onBack(), 3000);
+				onBack();
+				setTimeout(() => setSaved(false), 2000);
 			});
 		});
 	}
 
 	return (
-		<Box p={4}>
-			<Heading size="md">{editButtonClicked ? "Add" : "Confirm"} Pantry</Heading>
+		<Box
+			p={6}
+			pr={6}
+			bg="#F7F3EC"
+			w="500px"
+			h="560px"
+			display="flex"
+			flexDirection="column"
+			overflow="scroll"
+		>
+			<Heading
+				size="md"
+				fontFamily="'Playfair Display', serif"
+				fontSize="2xl"
+				fontWeight="700"
+				color="#1E3A0F"
+				letterSpacing="0.05em"
+				mb={3}
+			>
+				{editButtonClicked ? "Add" : "Confirm"} Pantry
+			</Heading>
 
 			{saved ? (
 				<Box
@@ -71,7 +91,29 @@ export default function EditConfirmation({
 					))}
 					<Button
 						mt={4}
-						colorScheme="green"
+						py={3}
+						w="auto"
+						h="200px"
+						whiteSpace="normal"
+						wordBreak="break-word"
+						bg="#4A7C2F"
+						color="white"
+						border="1.5px solid"
+						borderColor="#4A7C2F"
+						borderRadius="2xl"
+						fontFamily="'Inter', sans-serif"
+						fontSize="md"
+						fontWeight="500"
+						letterSpacing="0.02em"
+						_hover={{
+							bg: "white",
+							color: "#2D5016",
+							borderColor: "#C8D8B8",
+							transform: "translateY(-2px)",
+							boxShadow: "0 4px 12px rgba(74,124,47,0.25)",
+						}}
+						_active={{ bg: "#2D5016", color: "white" }}
+						transition="all 0.2s"
 						onClick={handleConfirm}
 					>
 						Confirm & Save

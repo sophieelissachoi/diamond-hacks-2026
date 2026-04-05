@@ -98,6 +98,7 @@ export default function IngredientCard({ ingredient }: Props) {
 		<Box
 			border="1px"
 			borderRadius="md"
+			bg="white"
 			p={3}
 			mt={2}
 		>

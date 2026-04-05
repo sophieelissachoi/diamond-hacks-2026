@@ -9,6 +9,7 @@ import {
 	Divider,
 } from "@chakra-ui/react";
 import { type Page, type PantryPage } from "./types";
+import "./App.css";
 
 import SearchRecipe from "./pages/Search";
 import SavedRecipes from "./pages/Saved";
