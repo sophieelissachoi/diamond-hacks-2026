@@ -90,16 +90,18 @@ export default function ScanRecipes({
 		<Box
 			p={6}
 			bg="#F7F3EC"
-			w="500px"
-			h="500px"
+			w="430px"
+			h="560px"
 			display="flex"
 			flexDirection="column"
-			overflow="scroll"
+			overflow="hidden"
 		>
+			{/* fixed header */}
 			<VStack
 				align="start"
 				gap={1}
 				mb={4}
+				flexShrink={0}
 			>
 				<Button
 					variant="ghost"
@@ -126,278 +128,276 @@ export default function ScanRecipes({
 					w="40px"
 					borderWidth="1.5px"
 				/>
+			</VStack>
 
-				<Box
-					mt={2}
+			{/* fixed scan button */}
+			<Box
+				flexShrink={0}
+				mb={3}
+			>
+				<Button
 					w="100%"
+					py={6}
+					whiteSpace="normal"
+					wordBreak="break-word"
+					bg="#4A7C2F"
+					color="white"
+					border="1.5px solid"
+					borderColor="#4A7C2F"
+					borderRadius="2xl"
+					fontFamily="'Inter', sans-serif"
+					fontSize="md"
+					fontWeight="500"
+					letterSpacing="0.02em"
+					_hover={{
+						bg: "white",
+						color: "#2D5016",
+						borderColor: "#C8D8B8",
+						transform: "translateY(-2px)",
+						boxShadow: "0 4px 12px rgba(74,124,47,0.25)",
+					}}
+					_active={{ bg: "#2D5016", color: "white" }}
+					transition="all 0.2s"
+					onClick={scanRecipe}
 				>
-					<Button
-						mt={2}
-						py={6}
-						w="100%"
-						whiteSpace="normal"
-						wordBreak="break-word"
-						bg="#4A7C2F"
-						color="white"
-						border="1.5px solid"
-						borderColor="#4A7C2F"
-						borderRadius="2xl"
-						fontFamily="'Inter', sans-serif"
-						fontSize="md"
-						fontWeight="500"
-						letterSpacing="0.02em"
-						_hover={{
-							bg: "white",
-							color: "#2D5016",
-							borderColor: "#C8D8B8",
-							transform: "translateY(-2px)",
-							boxShadow: "0 4px 12px rgba(74,124,47,0.25)",
-						}}
-						_active={{ bg: "#2D5016", color: "white" }}
-						transition="all 0.2s"
-						onClick={scanRecipe}
-					>
-						Scan Recipe
-					</Button>
+					Scan Recipe
+				</Button>
 
-					{isLoading && (
-						<Box
-							mt={4}
-							display="flex"
-							alignItems="center"
-							gap={2}
+				{isLoading && (
+					<Box
+						mt={3}
+						display="flex"
+						alignItems="center"
+						gap={2}
+					>
+						<Spinner
+							size="sm"
+							color="#4A7C2F"
+						/>
+						<Text
+							fontSize="sm"
+							fontFamily="'Inter', sans-serif"
+							color="#7A8F6A"
 						>
-							<Spinner
-								size="sm"
-								color="#4A7C2F"
-							/>
+							Analyzing the recipe...
+						</Text>
+					</Box>
+				)}
+			</Box>
+
+			{/* scrollable results */}
+			{recipeInfo && !isLoading && (
+				<>
+					<Box
+						flex={1}
+						overflowY="auto"
+						css={{
+							"&::-webkit-scrollbar": { width: "4px" },
+							"&::-webkit-scrollbar-track": { background: "transparent" },
+							"&::-webkit-scrollbar-thumb": {
+								background: "#C8D8B8",
+								borderRadius: "4px",
+							},
+						}}
+					>
+						<Box
+							bg="white"
+							borderRadius="2xl"
+							border="1.5px solid"
+							borderColor="#C8D8B8"
+							p={4}
+							mb={3}
+						>
 							<Text
+								fontFamily="'Playfair Display', serif"
 								fontSize="sm"
-								fontFamily="'Inter', sans-serif"
-								color="#7A8F6A"
+								fontWeight="700"
+								color="#336518"
 							>
-								Analyzing the recipe...
+								Have
+							</Text>
+							<Text
+								fontFamily="'Inter', sans-serif"
+								fontSize="xs"
+								color="#4A5240"
+								mt={1}
+							>
+								{Array.isArray(recipeInfo.have)
+									? recipeInfo.have.join(", ")
+									: recipeInfo.have}
+							</Text>
+
+							<Text
+								fontFamily="'Playfair Display', serif"
+								fontSize="sm"
+								fontWeight="700"
+								color="#941e1e"
+								mt={3}
+							>
+								Need
+							</Text>
+							<Text
+								fontFamily="'Inter', sans-serif"
+								fontSize="xs"
+								color="#4A5240"
+								mt={1}
+							>
+								{Array.isArray(recipeInfo.need)
+									? recipeInfo.need.join(", ")
+									: recipeInfo.need}
+							</Text>
+
+							<Text
+								fontFamily="'Playfair Display', serif"
+								fontSize="sm"
+								fontWeight="700"
+								color="#826413"
+								mt={3}
+							>
+								Substitute
+							</Text>
+							<Text
+								fontFamily="'Inter', sans-serif"
+								fontSize="xs"
+								color="#4A5240"
+								mt={1}
+							>
+								{Array.isArray(recipeInfo.substitute)
+									? recipeInfo.substitute.join(", ")
+									: recipeInfo.substitute}
 							</Text>
 						</Box>
-					)}
 
-					{recipeInfo && !isLoading && (
-						<>
-							<Box
-								flex={1}
-								overflowY="auto"
-								mt={4}
-								mb={2}
-								css={{
-									"&::-webkit-scrollbar": { width: "4px" },
-									"&::-webkit-scrollbar-track": { background: "transparent" },
-									"&::-webkit-scrollbar-thumb": {
-										background: "#C8D8B8",
-										borderRadius: "4px",
-									},
-								}}
+						<Box
+							bg="white"
+							borderRadius="2xl"
+							border="1.5px solid"
+							borderColor="#C8D8B8"
+							p={4}
+						>
+							<Text
+								fontFamily="'Inter', sans-serif"
+								fontSize="sm"
+								fontWeight="600"
+								color="#4A7C2F"
+								mb={3}
 							>
-								<Box
-									bg="white"
-									borderRadius="2xl"
-									border="1.5px solid"
-									borderColor="#C8D8B8"
-									p={4}
+								<a
+									href={recipeInfo.link}
+									target="_blank"
+									rel="noreferrer"
 								>
-									<Text
-										fontFamily="'Playfair Display', serif"
-										fontSize="sm"
-										fontWeight="700"
-										color="#1E3A0F"
-									>
-										Have:
-									</Text>
-
-									<Text
-										fontFamily="'Inter', sans-serif"
-										fontSize="xs"
-										color="#4A5240"
-										mt={1}
-									>
-										{Array.isArray(recipeInfo.have)
-											? recipeInfo.have.join(", ")
-											: recipeInfo.have}
-									</Text>
-
-									<Text
-										fontFamily="'Playfair Display', serif"
-										fontSize="sm"
-										fontWeight="700"
-										color="#1E3A0F"
-									>
-										Need:
-									</Text>
-
-									<Text
-										fontFamily="'Inter', sans-serif"
-										fontSize="xs"
-										color="#4A5240"
-										mt={1}
-									>
-										{Array.isArray(recipeInfo.need)
-											? recipeInfo.need.join(", ")
-											: recipeInfo.need}
-									</Text>
-
-									<Text
-										fontFamily="'Playfair Display', serif"
-										fontSize="sm"
-										fontWeight="700"
-										color="#1E3A0F"
-									>
-										Substitute:
-									</Text>
-
-									<Text
-										fontFamily="'Inter', sans-serif"
-										fontSize="xs"
-										color="#4A5240"
-										mt={1}
-									>
-										{Array.isArray(recipeInfo.substitute)
-											? recipeInfo.substitute.join(", ")
-											: recipeInfo.substitute}
-									</Text>
-								</Box>
-
-								<Box
-									bg="white"
-									borderRadius="2xl"
-									border="1.5px solid"
-									borderColor="#C8D8B8"
-									p={4}
-								>
-									<Text
-										fontFamily="'Inter', sans-serif"
-										fontSize="sm"
-										fontWeight="600"
-										color="#4A7C2F"
-										mb={3}
-									>
-										<a
-											href={recipeInfo.link}
-											target="_blank"
-											rel="noreferrer"
-										>
-											View Full Recipe →
-										</a>
-									</Text>
-
-									<Divider
-										borderColor="#E8EFE0"
-										mb={3}
-									/>
-
-									<Text
-										fontFamily="'Playfair Display', serif"
-										fontSize="sm"
-										fontWeight="700"
-										color="#1E3A0F"
-									>
-										Ingredients
-									</Text>
-									<Text
-										fontFamily="'Inter', sans-serif"
-										fontSize="xs"
-										color="#4A5240"
-										mt={1}
-									>
-										{Array.isArray(recipeInfo.ingredients)
-											? recipeInfo.ingredients.join(", ")
-											: recipeInfo.ingredients}
-									</Text>
-
-									<Text
-										fontFamily="'Playfair Display', serif"
-										fontSize="sm"
-										fontWeight="700"
-										color="#1E3A0F"
-										mt={3}
-									>
-										Instructions
-									</Text>
-									<Text
-										fontFamily="'Inter', sans-serif"
-										fontSize="xs"
-										color="#4A5240"
-										mt={1}
-									>
-										{Array.isArray(recipeInfo.instructions)
-											? recipeInfo.instructions.join(", ")
-											: recipeInfo.instructions}
-									</Text>
-
-									<Text
-										fontFamily="'Playfair Display', serif"
-										fontSize="sm"
-										fontWeight="700"
-										color="#1E3A0F"
-										mt={3}
-									>
-										Applicances
-									</Text>
-									<Text
-										fontFamily="'Inter', sans-serif"
-										fontSize="xs"
-										color="#4A5240"
-										mt={1}
-									>
-										{Array.isArray(recipeInfo.appliances)
-											? recipeInfo.appliances.join(", ")
-											: recipeInfo.appliances}
-									</Text>
-								</Box>
-							</Box>
-
-							<Box
-								mt={4}
-								bg="#F7F3EC"
-								borderTop="1px solid"
+									View Full Recipe →
+								</a>
+							</Text>
+							<Divider
 								borderColor="#E8EFE0"
-								pt={4}
-								flexShrink={0}
+								mb={3}
+							/>
+
+							<Text
+								fontFamily="'Playfair Display', serif"
+								fontSize="sm"
+								fontWeight="700"
+								color="#1E3A0F"
 							>
-								<Button
-									w="100%"
-									onClick={handleSave}
-									isDisabled={saved}
-									bg={saved ? "white" : "#4A7C2F"}
-									color={saved ? "#4A7C2F" : "white"}
-									border="1.5px solid"
-									borderColor="#4A7C2F"
-									borderRadius="xl"
-									fontFamily="'Inter', sans-serif"
-									fontSize="sm"
-									fontWeight="500"
-									_hover={{ bg: "white", color: "#2D5016" }}
-									transition="all 0.2s"
-								>
-									{saved ? "Saved ✓" : "Save Recipe"}
-								</Button>
-								<Button
-									w="100%"
-									variant="ghost"
-									color="#7A8F6A"
-									fontFamily="'Inter', sans-serif"
-									fontSize="sm"
-									_hover={{ color: "#2D5016", bg: "transparent" }}
-									onClick={() => {
-										setRecipeInfo(null);
-										setRecipeType("");
-									}}
-								>
-									Cancel
-								</Button>
-							</Box>
-						</>
-					)}
-				</Box>
-			</VStack>
+								Ingredients
+							</Text>
+							<Text
+								fontFamily="'Inter', sans-serif"
+								fontSize="xs"
+								color="#4A5240"
+								mt={1}
+							>
+								{Array.isArray(recipeInfo.ingredients)
+									? recipeInfo.ingredients.join(", ")
+									: recipeInfo.ingredients}
+							</Text>
+
+							<Text
+								fontFamily="'Playfair Display', serif"
+								fontSize="sm"
+								fontWeight="700"
+								color="#1E3A0F"
+								mt={3}
+							>
+								Instructions
+							</Text>
+							<Text
+								fontFamily="'Inter', sans-serif"
+								fontSize="xs"
+								color="#4A5240"
+								mt={1}
+							>
+								{Array.isArray(recipeInfo.instructions)
+									? recipeInfo.instructions.join(", ")
+									: recipeInfo.instructions}
+							</Text>
+
+							<Text
+								fontFamily="'Playfair Display', serif"
+								fontSize="sm"
+								fontWeight="700"
+								color="#1E3A0F"
+								mt={3}
+							>
+								Appliances
+							</Text>
+							<Text
+								fontFamily="'Inter', sans-serif"
+								fontSize="xs"
+								color="#4A5240"
+								mt={1}
+							>
+								{Array.isArray(recipeInfo.appliances)
+									? recipeInfo.appliances.join(", ")
+									: recipeInfo.appliances}
+							</Text>
+						</Box>
+					</Box>
+
+					{/* fixed bottom buttons */}
+					<Box
+						flexShrink={0}
+						pt={3}
+						borderTop="1px solid"
+						borderColor="#E8EFE0"
+					>
+						<Button
+							w="100%"
+							onClick={handleSave}
+							isDisabled={saved}
+							bg={saved ? "white" : "#4A7C2F"}
+							color={saved ? "#4A7C2F" : "white"}
+							border="1.5px solid"
+							borderColor="#4A7C2F"
+							borderRadius="xl"
+							fontFamily="'Inter', sans-serif"
+							fontSize="sm"
+							fontWeight="500"
+							_hover={{ bg: "white", color: "#2D5016" }}
+							transition="all 0.2s"
+							mb={2}
+						>
+							{saved ? "Saved ✓" : "Save Recipe"}
+						</Button>
+						<Button
+							w="100%"
+							variant="ghost"
+							color="#7A8F6A"
+							fontFamily="'Inter', sans-serif"
+							fontSize="sm"
+							_hover={{ color: "#2D5016", bg: "transparent" }}
+							onClick={() => {
+								setRecipeInfo(null);
+								setRecipeType("");
+							}}
+						>
+							Cancel
+						</Button>
+					</Box>
+				</>
+			)}
 		</Box>
 	);
 }

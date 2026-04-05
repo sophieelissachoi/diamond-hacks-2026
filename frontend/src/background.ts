@@ -7,9 +7,9 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 				func: (have: string[], need: string[], substitute: string) => {
 					const allText = document.querySelectorAll("li, p, span, td");
 
-					// extract "y" from "x can substitute y" — the ingredient on the page
-					const subTargets = substitute
-						.split(",")
+					const subTargets = (
+						Array.isArray(substitute) ? substitute : substitute.split(",")
+					)
 						.map((s) => {
 							const parts = s.toLowerCase().split("can substitute");
 							return parts[1]?.trim() ?? "";
@@ -32,7 +32,6 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 					allText.forEach((el) => {
 						const text = el.textContent?.toLowerCase() ?? "";
 
-						// check substitute first so it takes priority over have
 						const isSub = subTargets.some((i) => i.length > 3 && text.includes(i));
 						const isHave = !isSub && haveKeywords.some((i) => text.includes(i));
 						const isNeed =
