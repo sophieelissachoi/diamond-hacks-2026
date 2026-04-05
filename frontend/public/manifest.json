@@ -7,7 +7,7 @@
 		"default_popup": "index.html"
 	},
 	"background": {
-		"service_worker": "background.js"
+		"service_worker": "background.ts"
 	},
 	"permissions": ["storage", "tabs", "camera", "scripting"],
 	"host_permissions": ["http://localhost:3001/*", "<all_urls>"]

@@ -92,7 +92,6 @@ export default function TakePicture({ setCurrentPagePantry, onDone }: Props) {
 
 	async function handleScan() {
 		if (!photo) return;
-		alert("Photo size: " + Math.round(photo.length / 1024) + "kb");
 		setLoading(true);
 		setError("");
 
@@ -125,8 +124,7 @@ export default function TakePicture({ setCurrentPagePantry, onDone }: Props) {
 			};
 
 			onDone(ingredients);
-		} catch (e) {
-			alert("Error: " + JSON.stringify(e)); // 👈 add this
+		} catch {
 			setError("Request failed.");
 			setLoading(false);
 		}
