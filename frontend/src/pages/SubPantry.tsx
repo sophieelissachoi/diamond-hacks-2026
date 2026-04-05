@@ -53,25 +53,25 @@ export default function SubPantry({ setCurrentPagePantry, category }: Props) {
 	}
 
 	function handleDelete(index: number) {
-		const targetIngredient = ingredients[index]; // capture before async call
+		const targetIngredient = ingredients[index];
 
 		chrome.storage.local.get(["pantry"], (result) => {
 			const all: Ingredient[] = Array.isArray(result.pantry) ? result.pantry : [];
-			let deleted = false;
 
-			const updated = all.filter((i) => {
-				if (
-					!deleted &&
+			// find the first matching item in the full pantry
+			const pantryIndex = all.findIndex(
+				(i) =>
 					i.food === targetIngredient.food &&
-					i.name === targetIngredient.name &&
-					i.category === category
-				) {
-					deleted = true;
-					return false;
-				}
-				return true;
-			});
+					i.category === targetIngredient.category &&
+					i.quantity === targetIngredient.quantity,
+			);
 
+			if (pantryIndex === -1) return;
+
+			const updated = [
+				...all.slice(0, pantryIndex),
+				...all.slice(pantryIndex + 1),
+			];
 			chrome.storage.local.set({ pantry: updated }, () => {
 				setIngredients((prev) => prev.filter((_, i) => i !== index));
 			});
